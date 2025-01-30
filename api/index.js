@@ -8,19 +8,17 @@ import pool from './db.js';
 import cors from 'cors';
 import multer from 'multer';
 import cookieParser from 'cookie-parser';
-import uploadRoutes from './routes/upload.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
-
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
 
-// middlewares
-app.use((req, res, next)=>{
-  res.header("Access-Control-Allow-Credentials", true)
+// Middlewares
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Credentials", true);
   next();
 });
 app.use(cors({
@@ -30,9 +28,6 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-
-
-
 
 // Configuración de multer
 const storage = multer.diskStorage({
@@ -55,8 +50,7 @@ pool.connect((err) => {
   }
 });
 
-
-
+// Ruta para la carga de archivos
 app.post("/api/upload", upload.single("file"), (req, res) => {
   const file = req.file;
   if (!file) {
@@ -65,17 +59,15 @@ app.post("/api/upload", upload.single("file"), (req, res) => {
   res.status(200).json({ filePath: `/uploads/${file.filename}` });
 });
 
+// Rutas estáticas y API
 app.use('/uploads', express.static(path.join(__dirname, '../client/public/uploads')));
 app.use("/api/users", userRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/likes", likeRoutes);
 app.use("/api/comments", commentRoutes);
-app.use("/api/upload", uploadRoutes);
-
 
 const PORT = process.env.PORT || 8800;
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
-
