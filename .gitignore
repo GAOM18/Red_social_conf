@@ -1,1 +1,9 @@
 node_modules/
+
+
+# Ignorar contenedores y volúmenes temporales
+*.log
+.dockerignore
+docker-compose.override.yml
+
+.env

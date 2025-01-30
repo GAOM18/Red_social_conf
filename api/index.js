@@ -73,8 +73,9 @@ app.use("/api/likes", likeRoutes);
 app.use("/api/comments", commentRoutes);
 app.use("/api/upload", uploadRoutes);
 
-app.listen(8800, () => {
-  console.log('Servidor corriendo en el puerto 8800');
-});
 
+const PORT = process.env.PORT || 8800;
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo en el puerto ${PORT}`);
+});
 
